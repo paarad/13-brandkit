@@ -15,7 +15,7 @@ interface IconRequest {
 export async function POST(request: NextRequest) {
   try {
     const body: IconRequest = await request.json();
-    const { brandName, vibe, industry, memeMode } = body;
+    const { brandName, vibe, memeMode } = body;
 
     if (!process.env.OPENAI_API_KEY) {
       return NextResponse.json(
@@ -76,7 +76,7 @@ export async function POST(request: NextRequest) {
         vibe
       });
 
-    } catch (dalleError: any) {
+    } catch (dalleError: unknown) {
       console.error("DALL-E generation failed:", dalleError);
       
       // Return a fallback response with a simple SVG icon

@@ -6,7 +6,14 @@ interface ExportRequest {
     id: string;
     name: string;
     svg: string;
-    style: any;
+    style: {
+      fontFamily: string;
+      fontSize: string;
+      fontWeight: string;
+      letterSpacing: string;
+      textTransform: string;
+      color: string;
+    };
   }>;
   palette: {
     name: string;
@@ -102,13 +109,14 @@ function hexToHsl(hex: string): string {
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
   if (!result) return "hsl(0, 0%, 0%)";
   
-  let r = parseInt(result[1], 16) / 255;
-  let g = parseInt(result[2], 16) / 255;
-  let b = parseInt(result[3], 16) / 255;
+  const r = parseInt(result[1], 16) / 255;
+  const g = parseInt(result[2], 16) / 255;
+  const b = parseInt(result[3], 16) / 255;
 
   const max = Math.max(r, g, b);
   const min = Math.min(r, g, b);
-  let h = 0, s = 0, l = (max + min) / 2;
+  let h = 0, s = 0;
+  const l = (max + min) / 2;
 
   if (max === min) {
     h = s = 0;
@@ -187,7 +195,7 @@ function generateFavicon(brandName: string, color: string, vibe: string): string
   </svg>`;
 }
 
-function generateSocialCard(brandName: string, tagline: string | undefined, palette: any, vibe: string): string {
+function generateSocialCard(brandName: string, tagline: string | undefined, palette: { primary: string; accent: string }, vibe: string): string {
   const weight = vibe === "brutalist" ? "900" : vibe === "elegant" ? "400" : "600";
   const textTransform = vibe === "futuristic" || vibe === "brutalist" ? "uppercase" : "none";
   

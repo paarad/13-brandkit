@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -54,7 +54,7 @@ interface LogoVariant {
   };
 }
 
-export default function Studio() {
+function StudioContent() {
   const searchParams = useSearchParams();
   const [brandName, setBrandName] = useState("");
   const [tagline, setTagline] = useState("");
@@ -117,53 +117,7 @@ export default function Studio() {
     }
   };
 
-  const getVibeFont = (vibe: string): string => {
-    const fonts = {
-      minimalist: "Inter, sans-serif",
-      futuristic: "Space Grotesk, sans-serif", 
-      elegant: "Playfair Display, serif",
-      rounded: "Nunito, sans-serif",
-      brutalist: "Arial Black, sans-serif",
-      monospace: "JetBrains Mono, monospace"
-    };
-    return fonts[vibe as keyof typeof fonts] || fonts.minimalist;
-  };
 
-  const getVibeWeight = (vibe: string): string => {
-    const weights = {
-      minimalist: "300",
-      futuristic: "700",
-      elegant: "400", 
-      rounded: "600",
-      brutalist: "900",
-      monospace: "500"
-    };
-    return weights[vibe as keyof typeof weights] || "400";
-  };
-
-  const getVibeSpacing = (vibe: string): string => {
-    const spacing = {
-      minimalist: "0.05em",
-      futuristic: "0.1em",
-      elegant: "0.02em",
-      rounded: "0.03em", 
-      brutalist: "0.08em",
-      monospace: "0.05em"
-    };
-    return spacing[vibe as keyof typeof spacing] || "normal";
-  };
-
-  const getVibeCase = (vibe: string): string => {
-    const casing = {
-      minimalist: "lowercase",
-      futuristic: "uppercase", 
-      elegant: "capitalize",
-      rounded: "lowercase",
-      brutalist: "uppercase",
-      monospace: "lowercase"
-    };
-    return casing[vibe as keyof typeof casing] || "none";
-  };
 
   const copyToClipboard = async (text: string, variantId: string) => {
     try {
@@ -360,7 +314,7 @@ export default function Studio() {
                 {brandName && (
                   <Button onClick={generateLogos}>
                     <Sparkles className="mr-2 h-4 w-4" />
-                    Generate "{brandName}" Logos
+                    Generate &quot;{brandName}&quot; Logos
                   </Button>
                 )}
               </div>
@@ -396,15 +350,15 @@ export default function Studio() {
                         </CardHeader>
                         <CardContent>
                           <div className="bg-white p-8 rounded-lg border flex items-center justify-center min-h-[200px]">
-                            <div
-                              style={{
-                                fontFamily: variant.style.fontFamily,
-                                fontSize: variant.style.fontSize,
-                                fontWeight: variant.style.fontWeight,
-                                letterSpacing: variant.style.letterSpacing,
-                                textTransform: variant.style.textTransform as any,
-                                color: variant.style.color
-                              }}
+                                                         <div
+                               style={{
+                                 fontFamily: variant.style.fontFamily,
+                                 fontSize: variant.style.fontSize,
+                                 fontWeight: variant.style.fontWeight,
+                                 letterSpacing: variant.style.letterSpacing,
+                                 textTransform: variant.style.textTransform as "uppercase" | "lowercase" | "capitalize" | "none",
+                                 color: variant.style.color
+                               }}
                             >
                               {variant.style.textTransform === "uppercase" ? brandName.toUpperCase() : 
                                variant.style.textTransform === "lowercase" ? brandName.toLowerCase() : 
@@ -426,15 +380,15 @@ export default function Studio() {
                         </CardHeader>
                         <CardContent>
                           <div className="bg-black p-8 rounded-lg border flex items-center justify-center min-h-[200px]">
-                            <div
-                              style={{
-                                fontFamily: variant.style.fontFamily,
-                                fontSize: variant.style.fontSize,
-                                fontWeight: variant.style.fontWeight,
-                                letterSpacing: variant.style.letterSpacing,
-                                textTransform: variant.style.textTransform as any,
-                                color: "white"
-                              }}
+                                                         <div
+                               style={{
+                                 fontFamily: variant.style.fontFamily,
+                                 fontSize: variant.style.fontSize,
+                                 fontWeight: variant.style.fontWeight,
+                                 letterSpacing: variant.style.letterSpacing,
+                                 textTransform: variant.style.textTransform as "uppercase" | "lowercase" | "capitalize" | "none",
+                                 color: "white"
+                               }}
                             >
                               {variant.style.textTransform === "uppercase" ? brandName.toUpperCase() : 
                                variant.style.textTransform === "lowercase" ? brandName.toLowerCase() : 
@@ -546,5 +500,20 @@ export default function Studio() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function Studio() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
+          <p>Loading Studio...</p>
+        </div>
+      </div>
+    }>
+      <StudioContent />
+    </Suspense>
   );
 } 
