@@ -104,9 +104,9 @@ const generateLogoWithDALLE = async (brandName: string, tagline: string | undefi
       throw new Error("No image generated");
     }
 
-    // Return the DALL-E generated logo URL in a simple SVG wrapper for consistent display
-    return `<svg width="400" height="200" xmlns="http://www.w3.org/2000/svg">
-      <image href="${imageUrl}" x="0" y="0" width="400" height="200" preserveAspectRatio="xMidYMid meet"/>
+    // Return the DALL-E generated logo URL in a square SVG wrapper for grid display
+    return `<svg width="200" height="200" xmlns="http://www.w3.org/2000/svg">
+      <image href="${imageUrl}" x="0" y="0" width="200" height="200" preserveAspectRatio="xMidYMid meet"/>
     </svg>`;
 
   } catch (error) {
@@ -116,19 +116,19 @@ const generateLogoWithDALLE = async (brandName: string, tagline: string | undefi
 };
 
 const generateLogoPrompt = (brandName: string, tagline: string | undefined, vibe: string, memeMode: boolean, variant: string): string => {
-  const basePrompt = `Professional logo design. Company name is "${brandName}" - spell this EXACTLY as written. ${tagline ? `Tagline is "${tagline}". ` : ''}CRITICAL: The text "${brandName}" must be spelled correctly letter by letter. `;
+  const basePrompt = `SQUARE LOGO DESIGN for "${brandName}" - spell EXACTLY as written. ${tagline ? `Tagline: "${tagline}". ` : ''}REQUIREMENTS: 1:1 square aspect ratio, logo fills most of the frame, clean white background, BLACK AND WHITE ONLY (monochrome). CRITICAL: Text "${brandName}" must be spelled perfectly letter by letter. Large, prominent design that uses the full square space. `;
   
   if (memeMode) {
-    return basePrompt + `Crypto/meme culture inspired, playful but still professional. Bold typography, crypto aesthetics, modern and clean. No emojis, no clipart. Vector-style logo design. White background. IMPORTANT: Text must be "${brandName}" spelled exactly.`;
+    return basePrompt + `Crypto/meme inspired but BLACK AND WHITE ONLY. Bold monochrome typography, crypto aesthetics, no colors. Large design fills entire square frame. Vector-style, professional quality monochrome logo.`;
   }
 
   const vibePrompts = {
-    minimalist: `Ultra clean minimalist design. Simple typography, lots of white space, geometric precision. Think Apple, Airbnb. Modern sans-serif font. Monochromatic or very limited color palette.`,
-    futuristic: `Futuristic tech company aesthetic. Angular, sleek, modern. Think Tesla, SpaceX. Bold sans-serif, possibly with subtle geometric elements. High-tech feeling.`,
-    elegant: `Sophisticated, premium, luxury brand aesthetic. Think Chanel, Tiffany. Elegant serif or refined sans-serif typography. Classic, timeless design.`,
-    rounded: `Friendly, approachable, rounded design. Think Google, Spotify. Soft corners, organic shapes, friendly typography. Warm and welcoming.`,
-    brutalist: `Bold, raw, architectural aesthetic. Think Balenciaga, architectural firms. Heavy typography, strong geometric shapes, bold contrast.`,
-    monospace: `Technical, developer-focused aesthetic. Think GitHub, coding tools. Monospace typography, grid-based, precise, technical feeling.`
+    minimalist: `MONOCHROME minimalist design, SQUARE format, BLACK AND WHITE ONLY. Large typography fills the frame, lots of white space, geometric precision. Think Apple, Airbnb. Modern sans-serif font, no colors, pure black and white logo design.`,
+    futuristic: `MONOCHROME futuristic tech aesthetic, SQUARE format, BLACK AND WHITE ONLY. Angular, sleek, modern design fills entire frame. Think Tesla, SpaceX. Bold sans-serif, geometric elements, pure black and white design.`,
+    elegant: `MONOCHROME sophisticated luxury brand, SQUARE format, BLACK AND WHITE ONLY. Premium design fills the square completely. Think Chanel, Tiffany. Elegant typography, classic design, pure black and white.`,
+    rounded: `MONOCHROME friendly design, SQUARE format, BLACK AND WHITE ONLY. Soft corners, organic shapes fill the frame. Think Google, Spotify. Friendly typography, pure black and white design.`,
+    brutalist: `MONOCHROME bold architectural aesthetic, SQUARE format, BLACK AND WHITE ONLY. Heavy typography, strong geometric shapes fill entire frame. Think Balenciaga. Bold contrast, pure black and white.`,
+    monospace: `MONOCHROME technical aesthetic, SQUARE format, BLACK AND WHITE ONLY. Monospace typography fills the frame. Think GitHub, coding tools. Grid-based, precise, pure black and white design.`
   };
 
   const variantInstructions = {
@@ -152,36 +152,36 @@ const generateFallbackSVGLogo = (brandName: string, tagline: string | undefined,
   if (textTransform === "uppercase") displayName = brandName.toUpperCase();
   if (textTransform === "lowercase") displayName = brandName.toLowerCase();
   
-  // Create distinct variations for each layout
+  // Create distinct variations for each layout - all in 200x200 square format
   switch (variant) {
     case 'horizontal':
-      return `<svg width="400" height="80" xmlns="http://www.w3.org/2000/svg">
-        <text x="20" y="50" font-family="${fontFamily}" font-size="42" font-weight="${fontWeight}" fill="#1a1a1a" letter-spacing="0.05em">
+      return `<svg width="200" height="200" xmlns="http://www.w3.org/2000/svg">
+        <text x="100" y="100" text-anchor="middle" dominant-baseline="middle" font-family="${fontFamily}" font-size="32" font-weight="${fontWeight}" fill="#1a1a1a" letter-spacing="0.05em">
           ${displayName}
         </text>
-        ${tagline ? `<text x="20" y="70" font-family="${fontFamily}" font-size="14" fill="#666" letter-spacing="0.1em">${tagline}</text>` : ''}
+        ${tagline ? `<text x="100" y="130" text-anchor="middle" font-family="${fontFamily}" font-size="12" fill="#666" letter-spacing="0.1em">${tagline}</text>` : ''}
       </svg>`;
       
     case 'stacked':
-      return `<svg width="300" height="140" xmlns="http://www.w3.org/2000/svg">
-        <text x="150" y="60" text-anchor="middle" font-family="${fontFamily}" font-size="36" font-weight="${fontWeight}" fill="#1a1a1a" letter-spacing="0.05em">
+      return `<svg width="200" height="200" xmlns="http://www.w3.org/2000/svg">
+        <text x="100" y="80" text-anchor="middle" font-family="${fontFamily}" font-size="28" font-weight="${fontWeight}" fill="#1a1a1a" letter-spacing="0.05em">
           ${displayName}
         </text>
-        ${tagline ? `<text x="150" y="90" text-anchor="middle" font-family="${fontFamily}" font-size="14" fill="#666" letter-spacing="0.1em">${tagline.toUpperCase()}</text>` : ''}
-        <line x1="75" y1="110" x2="225" y2="110" stroke="#e5e5e5" stroke-width="1"/>
+        ${tagline ? `<text x="100" y="110" text-anchor="middle" font-family="${fontFamily}" font-size="12" fill="#666" letter-spacing="0.1em">${tagline.toUpperCase()}</text>` : ''}
+        <line x1="50" y1="140" x2="150" y2="140" stroke="#e5e5e5" stroke-width="2"/>
       </svg>`;
       
     case 'wordmark':
-      return `<svg width="350" height="100" xmlns="http://www.w3.org/2000/svg">
-        <rect x="0" y="0" width="350" height="100" fill="#f8f9fa" stroke="#e5e5e5" stroke-width="1"/>
-        <text x="175" y="60" text-anchor="middle" font-family="${fontFamily}" font-size="48" font-weight="${fontWeight}" fill="#1a1a1a" letter-spacing="0.1em">
+      return `<svg width="200" height="200" xmlns="http://www.w3.org/2000/svg">
+        <rect x="10" y="10" width="180" height="180" fill="#f8f9fa" stroke="#e5e5e5" stroke-width="2"/>
+        <text x="100" y="100" text-anchor="middle" dominant-baseline="middle" font-family="${fontFamily}" font-size="24" font-weight="${fontWeight}" fill="#1a1a1a" letter-spacing="0.1em">
           ${displayName}
         </text>
       </svg>`;
       
     default:
-      return `<svg width="350" height="80" xmlns="http://www.w3.org/2000/svg">
-        <text x="20" y="50" font-family="${fontFamily}" font-size="42" font-weight="${fontWeight}" fill="#1a1a1a" letter-spacing="0.05em">
+      return `<svg width="200" height="200" xmlns="http://www.w3.org/2000/svg">
+        <text x="100" y="100" text-anchor="middle" dominant-baseline="middle" font-family="${fontFamily}" font-size="32" font-weight="${fontWeight}" fill="#1a1a1a" letter-spacing="0.05em">
           ${displayName}
         </text>
       </svg>`;
