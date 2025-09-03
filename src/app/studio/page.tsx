@@ -349,27 +349,12 @@ function StudioContent() {
                           <CardTitle className="text-sm font-medium">Light Background</CardTitle>
                         </CardHeader>
                         <CardContent>
-                          <div className="bg-white p-8 rounded-lg border flex items-center justify-center min-h-[200px]">
-                                                         <div
-                               style={{
-                                 fontFamily: variant.style.fontFamily,
-                                 fontSize: variant.style.fontSize,
-                                 fontWeight: variant.style.fontWeight,
-                                 letterSpacing: variant.style.letterSpacing,
-                                 textTransform: variant.style.textTransform as "uppercase" | "lowercase" | "capitalize" | "none",
-                                 color: variant.style.color
-                               }}
-                            >
-                              {variant.style.textTransform === "uppercase" ? brandName.toUpperCase() : 
-                               variant.style.textTransform === "lowercase" ? brandName.toLowerCase() : 
-                               brandName}
-                              {tagline && variant.name === "Stacked" && (
-                                <div className="text-sm mt-2" style={{ color: selectedPalette.accent }}>
-                                  {tagline}
-                                </div>
-                              )}
-                            </div>
-                          </div>
+                                                     <div className="bg-white p-8 rounded-lg border flex items-center justify-center min-h-[200px]">
+                             <div 
+                               dangerouslySetInnerHTML={{ __html: variant.svg }}
+                               className="w-full flex justify-center"
+                             />
+                           </div>
                         </CardContent>
                       </Card>
 
@@ -379,27 +364,12 @@ function StudioContent() {
                           <CardTitle className="text-sm font-medium">Dark Background</CardTitle>
                         </CardHeader>
                         <CardContent>
-                          <div className="bg-black p-8 rounded-lg border flex items-center justify-center min-h-[200px]">
-                                                         <div
-                               style={{
-                                 fontFamily: variant.style.fontFamily,
-                                 fontSize: variant.style.fontSize,
-                                 fontWeight: variant.style.fontWeight,
-                                 letterSpacing: variant.style.letterSpacing,
-                                 textTransform: variant.style.textTransform as "uppercase" | "lowercase" | "capitalize" | "none",
-                                 color: "white"
-                               }}
-                            >
-                              {variant.style.textTransform === "uppercase" ? brandName.toUpperCase() : 
-                               variant.style.textTransform === "lowercase" ? brandName.toLowerCase() : 
-                               brandName}
-                              {tagline && variant.name === "Stacked" && (
-                                <div className="text-sm mt-2 opacity-70">
-                                  {tagline}
-                                </div>
-                              )}
-                            </div>
-                          </div>
+                                                     <div className="bg-black p-8 rounded-lg border flex items-center justify-center min-h-[200px]">
+                             <div 
+                               dangerouslySetInnerHTML={{ __html: variant.svg.replace(/fill="url\(#([^"]+)\)"/g, 'fill="white"').replace(/fill="#[^"]*"/g, 'fill="white"').replace(/stroke="#[^"]*"/g, 'stroke="white"') }}
+                               className="w-full flex justify-center"
+                             />
+                           </div>
                         </CardContent>
                       </Card>
                     </div>
