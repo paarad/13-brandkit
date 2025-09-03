@@ -63,8 +63,11 @@ function StudioContent() {
   const [memeMode, setMemeMode] = useState(false);
   const [wantIcon, setWantIcon] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [textVariants, setTextVariants] = useState<LogoVariant[]>([]);
+  const [aiVariants, setAiVariants] = useState<LogoVariant[]>([]);
   const [logoVariants, setLogoVariants] = useState<LogoVariant[]>([]);
   const [selectedVariant, setSelectedVariant] = useState<LogoVariant | null>(null);
+  const [logoType, setLogoType] = useState<"text" | "ai">("text");
   const [copiedVariant, setCopiedVariant] = useState<string | null>(null);
 
   useEffect(() => {
@@ -99,15 +102,17 @@ function StudioContent() {
         throw new Error('Failed to generate logos');
       }
 
-      const data = await response.json();
-      setLogoVariants(data.variants);
-      setSelectedVariant(data.variants[0]);
-      
-      // Handle suggested taglines
-      if (data.suggestedTaglines && data.suggestedTaglines.length > 0 && !tagline) {
-        // Could show tagline suggestions here
-        console.log('Suggested taglines:', data.suggestedTaglines);
-      }
+             const data = await response.json();
+       setTextVariants(data.textVariants || []);
+       setAiVariants(data.aiVariants || []);
+       setLogoVariants(data.textVariants || []); // Default to text variants
+       setSelectedVariant((data.textVariants || [])[0]);
+       
+       // Handle suggested taglines
+       if (data.suggestedTaglines && data.suggestedTaglines.length > 0 && !tagline) {
+         // Could show tagline suggestions here
+         console.log('Suggested taglines:', data.suggestedTaglines);
+       }
       
     } catch (error) {
       console.error('Failed to generate logos:', error);
@@ -323,19 +328,33 @@ function StudioContent() {
             <div className="h-full flex flex-col">
               <div className="mb-6">
                 <h2 className="text-2xl font-bold mb-2">Logo Variants</h2>
-                <p className="text-muted-foreground">
-                  Choose your favorite variant to preview and export
+                <p className="text-muted-foreground mb-4">
+                  Choose between text-based logos or AI-generated designs
                 </p>
+                
+                {/* Logo Type Tabs */}
+                <Tabs value={logoType} onValueChange={(value) => {
+                  const logoTypeValue = value as "text" | "ai";
+                  setLogoType(logoTypeValue);
+                  const variants = logoTypeValue === "text" ? textVariants : aiVariants;
+                  setLogoVariants(variants);
+                  setSelectedVariant(variants[0] || null);
+                }} className="mb-6">
+                  <TabsList className="grid w-full grid-cols-2">
+                    <TabsTrigger value="text">Text Logos</TabsTrigger>
+                    <TabsTrigger value="ai">AI Generated</TabsTrigger>
+                  </TabsList>
+                </Tabs>
               </div>
 
-              <Tabs value={selectedVariant?.id || "1"} onValueChange={(value) => {
+              <Tabs value={selectedVariant?.id || "text-1"} onValueChange={(value) => {
                 const variant = logoVariants.find(v => v.id === value);
                 if (variant) setSelectedVariant(variant);
               }}>
                 <TabsList className="grid w-full grid-cols-3">
                   {logoVariants.map((variant) => (
                     <TabsTrigger key={variant.id} value={variant.id}>
-                      {variant.name}
+                      {variant.name.replace(/^(AI |Text )?/, '')}
                     </TabsTrigger>
                   ))}
                 </TabsList>
