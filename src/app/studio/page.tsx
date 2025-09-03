@@ -365,29 +365,38 @@ function StudioContent() {
                       </CardTitle>
                     </CardHeader>
                     <CardContent>
-                      {/* Light Background Preview */}
-                      <div className="bg-white p-4 rounded border flex items-center justify-center min-h-[120px] mb-3">
+                      {/* Logo Preview */}
+                      <div className={`bg-white p-4 rounded border flex items-center justify-center ${logoType === "ai" ? "min-h-[200px]" : "min-h-[120px] mb-3"}`}>
                         <div 
                           dangerouslySetInnerHTML={{ __html: variant.svg }}
                           className="w-full flex justify-center"
-                          style={{ maxHeight: '100px', overflow: 'hidden' }}
+                          style={{ maxHeight: logoType === "ai" ? '160px' : '100px', overflow: 'hidden' }}
                         />
                       </div>
                       
-                      {/* Dark Background Preview */}
-                      <div className="bg-black p-4 rounded border flex items-center justify-center min-h-[120px]">
-                        <div 
-                          dangerouslySetInnerHTML={{ 
-                            __html: variant.svg
-                              .replace(/fill="#[^"]*"/g, 'fill="white"')
-                              .replace(/stroke="#[^"]*"/g, 'stroke="white"')
-                              .replace(/fill="#1a1a1a"/g, 'fill="white"')
-                              .replace(/fill="#666"/g, 'fill="#ccc"')
-                          }}
-                          className="w-full flex justify-center"
-                          style={{ maxHeight: '100px', overflow: 'hidden' }}
-                        />
-                      </div>
+                      {/* Dark Background Preview - Only show for text logos */}
+                      {logoType === "text" && (
+                        <div className="bg-black p-4 rounded border flex items-center justify-center min-h-[120px]">
+                          <div 
+                            dangerouslySetInnerHTML={{ 
+                              __html: variant.svg
+                                .replace(/fill="#[^"]*"/g, 'fill="white"')
+                                .replace(/stroke="#[^"]*"/g, 'stroke="white"')
+                                .replace(/fill="#1a1a1a"/g, 'fill="white"')
+                                .replace(/fill="#666"/g, 'fill="#ccc"')
+                            }}
+                            className="w-full flex justify-center"
+                            style={{ maxHeight: '100px', overflow: 'hidden' }}
+                          />
+                        </div>
+                      )}
+                      
+                      {/* AI Logo Note */}
+                      {logoType === "ai" && (
+                        <div className="text-center text-xs text-muted-foreground mt-2">
+                          AI-generated logo with original colors
+                        </div>
+                      )}
                     </CardContent>
                   </Card>
                 ))}
