@@ -312,7 +312,7 @@ export async function POST(request: NextRequest) {
       }
     ];
 
-    const variants = textVariants; // Default to text variants for backward compatibility
+    // Removed unused variants variable for cleaner build
 
     return NextResponse.json({
       textVariants,
