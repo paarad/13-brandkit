@@ -80,14 +80,14 @@ const getVibeCase = (vibe: string): string => {
   return casing[vibe as keyof typeof casing] || "none";
 };
 
-const generateLogoWithDALLE = async (brandName: string, tagline: string | undefined, vibe: string, memeMode: boolean, variant: 'horizontal' | 'stacked' | 'wordmark'): Promise<string> => {
+const generateLogoWithDALLE = async (brandName: string, tagline: string | undefined, vibe: string, memeMode: boolean, variant: 'horizontal' | 'stacked' | 'wordmark', palette?: { primary: string; accent: string }): Promise<string> => {
   if (!process.env.OPENAI_API_KEY) {
     // Fallback to simple text logo
     return generateFallbackSVGLogo(brandName, tagline, vibe, variant);
   }
 
   try {
-    const prompt = generateLogoPrompt(brandName, tagline, vibe, memeMode, variant);
+    const prompt = generateLogoPrompt(brandName, tagline, vibe, memeMode, variant, palette);
     
     const response = await openai.images.generate({
       model: "dall-e-3",
@@ -115,20 +115,28 @@ const generateLogoWithDALLE = async (brandName: string, tagline: string | undefi
   }
 };
 
-const generateLogoPrompt = (brandName: string, tagline: string | undefined, vibe: string, memeMode: boolean, variant: string): string => {
-  const basePrompt = `SQUARE LOGO DESIGN for "${brandName}" - spell EXACTLY as written. ${tagline ? `Tagline: "${tagline}". ` : ''}REQUIREMENTS: 1:1 square aspect ratio, logo fills most of the frame, clean white background, BLACK AND WHITE ONLY (monochrome). CRITICAL: Text "${brandName}" must be spelled perfectly letter by letter. Large, prominent design that uses the full square space. `;
+const generateLogoPrompt = (brandName: string, tagline: string | undefined, vibe: string, memeMode: boolean, variant: string, palette?: { primary: string; accent: string }): string => {
+  const isMonochrome = palette?.primary === "#000000";
+  const colorInstruction = isMonochrome 
+    ? "BLACK AND WHITE ONLY (monochrome)" 
+    : `using brand colors ${palette?.primary} (primary) and ${palette?.accent} (accent)`;
+  
+  const basePrompt = `SQUARE LOGO DESIGN for "${brandName}" - spell EXACTLY as written. ${tagline ? `Tagline: "${tagline}". ` : ''}REQUIREMENTS: 1:1 square aspect ratio, logo fills most of the frame, clean white background, ${colorInstruction}. CRITICAL: Text "${brandName}" must be spelled perfectly letter by letter. Large, prominent design that uses the full square space. `;
   
   if (memeMode) {
-    return basePrompt + `Crypto/meme inspired but BLACK AND WHITE ONLY. Bold monochrome typography, crypto aesthetics, no colors. Large design fills entire square frame. Vector-style, professional quality monochrome logo.`;
+    const memeColor = isMonochrome ? "BLACK AND WHITE ONLY" : `bold colors ${palette?.primary} and ${palette?.accent}`;
+    return basePrompt + `Crypto/meme inspired with ${memeColor}. Bold typography, crypto aesthetics. Large design fills entire square frame. Vector-style, professional quality logo.`;
   }
 
+  const colorContext = isMonochrome ? "BLACK AND WHITE ONLY" : `using colors ${palette?.primary} and ${palette?.accent}`;
+  
   const vibePrompts = {
-    minimalist: `MONOCHROME minimalist design, SQUARE format, BLACK AND WHITE ONLY. Large typography fills the frame, lots of white space, geometric precision. Think Apple, Airbnb. Modern sans-serif font, no colors, pure black and white logo design.`,
-    futuristic: `MONOCHROME futuristic tech aesthetic, SQUARE format, BLACK AND WHITE ONLY. Angular, sleek, modern design fills entire frame. Think Tesla, SpaceX. Bold sans-serif, geometric elements, pure black and white design.`,
-    elegant: `MONOCHROME sophisticated luxury brand, SQUARE format, BLACK AND WHITE ONLY. Premium design fills the square completely. Think Chanel, Tiffany. Elegant typography, classic design, pure black and white.`,
-    rounded: `MONOCHROME friendly design, SQUARE format, BLACK AND WHITE ONLY. Soft corners, organic shapes fill the frame. Think Google, Spotify. Friendly typography, pure black and white design.`,
-    brutalist: `MONOCHROME bold architectural aesthetic, SQUARE format, BLACK AND WHITE ONLY. Heavy typography, strong geometric shapes fill entire frame. Think Balenciaga. Bold contrast, pure black and white.`,
-    monospace: `MONOCHROME technical aesthetic, SQUARE format, BLACK AND WHITE ONLY. Monospace typography fills the frame. Think GitHub, coding tools. Grid-based, precise, pure black and white design.`
+    minimalist: `Clean minimalist design, SQUARE format, ${colorContext}. Large typography fills the frame, lots of white space, geometric precision. Think Apple, Airbnb. Modern sans-serif font.`,
+    futuristic: `Futuristic tech aesthetic, SQUARE format, ${colorContext}. Angular, sleek, modern design fills entire frame. Think Tesla, SpaceX. Bold sans-serif, geometric elements.`,
+    elegant: `Sophisticated luxury brand, SQUARE format, ${colorContext}. Premium design fills the square completely. Think Chanel, Tiffany. Elegant typography, classic design.`,
+    rounded: `Friendly, approachable design, SQUARE format, ${colorContext}. Soft corners, organic shapes fill the frame. Think Google, Spotify. Friendly typography.`,
+    brutalist: `Bold, raw architectural aesthetic, SQUARE format, ${colorContext}. Heavy typography, strong geometric shapes fill entire frame. Think Balenciaga. Bold contrast.`,
+    monospace: `Technical, developer aesthetic, SQUARE format, ${colorContext}. Monospace typography fills the frame. Think GitHub, coding tools. Grid-based, precise design.`
   };
 
   const variantInstructions = {
@@ -284,9 +292,9 @@ export async function POST(request: NextRequest) {
 
     // Generate AI logo variants using DALL-E (slower but more creative)
     const [aiVariant1Svg, aiVariant2Svg, aiVariant3Svg] = await Promise.all([
-      generateLogoWithDALLE(name, tagline, vibe, memeMode, 'horizontal'),
-      generateLogoWithDALLE(name, tagline, vibe, memeMode, 'stacked'),
-      generateLogoWithDALLE(name, tagline, vibe, memeMode, 'wordmark')
+      generateLogoWithDALLE(name, tagline, vibe, memeMode, 'horizontal', palette),
+      generateLogoWithDALLE(name, tagline, vibe, memeMode, 'stacked', palette),
+      generateLogoWithDALLE(name, tagline, vibe, memeMode, 'wordmark', palette)
     ]);
 
     const aiVariants: LogoVariant[] = [
