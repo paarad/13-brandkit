@@ -347,54 +347,51 @@ function StudioContent() {
                 </Tabs>
               </div>
 
-              <Tabs value={selectedVariant?.id || "text-1"} onValueChange={(value) => {
-                const variant = logoVariants.find(v => v.id === value);
-                if (variant) setSelectedVariant(variant);
-              }}>
-                <TabsList className="grid w-full grid-cols-3">
-                  {logoVariants.map((variant) => (
-                    <TabsTrigger key={variant.id} value={variant.id}>
-                      {variant.name.replace(/^(AI |Text )?/, '')}
-                    </TabsTrigger>
-                  ))}
-                </TabsList>
-
+                            {/* Logo Grid Display */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {logoVariants.map((variant) => (
-                  <TabsContent key={variant.id} value={variant.id} className="mt-6">
-                    <div className="space-y-6">
+                  <Card 
+                    key={variant.id} 
+                    className={`cursor-pointer transition-all ${
+                      selectedVariant?.id === variant.id 
+                        ? 'ring-2 ring-primary shadow-lg' 
+                        : 'hover:shadow-md'
+                    }`}
+                    onClick={() => setSelectedVariant(variant)}
+                  >
+                    <CardHeader>
+                      <CardTitle className="text-sm font-medium">
+                        {variant.name.replace(/^(AI |Text )?/, '')}
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
                       {/* Light Background Preview */}
-                      <Card>
-                        <CardHeader>
-                          <CardTitle className="text-sm font-medium">Light Background</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                                                     <div className="bg-white p-8 rounded-lg border flex items-center justify-center min-h-[200px]">
-                             <div 
-                               dangerouslySetInnerHTML={{ __html: variant.svg }}
-                               className="w-full flex justify-center"
-                             />
-                           </div>
-                        </CardContent>
-                      </Card>
-
+                      <div className="bg-white p-4 rounded border flex items-center justify-center min-h-[120px] mb-3">
+                        <div 
+                          dangerouslySetInnerHTML={{ __html: variant.svg }}
+                          className="w-full flex justify-center"
+                          style={{ maxHeight: '100px', overflow: 'hidden' }}
+                        />
+                      </div>
+                      
                       {/* Dark Background Preview */}
-                      <Card>
-                        <CardHeader>
-                          <CardTitle className="text-sm font-medium">Dark Background</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                                                     <div className="bg-black p-8 rounded-lg border flex items-center justify-center min-h-[200px]">
-                             <div 
-                               dangerouslySetInnerHTML={{ __html: variant.svg.replace(/fill="url\(#([^"]+)\)"/g, 'fill="white"').replace(/fill="#[^"]*"/g, 'fill="white"').replace(/stroke="#[^"]*"/g, 'stroke="white"') }}
-                               className="w-full flex justify-center"
-                             />
-                           </div>
-                        </CardContent>
-                      </Card>
-                    </div>
-                  </TabsContent>
+                      <div className="bg-black p-4 rounded border flex items-center justify-center min-h-[120px]">
+                        <div 
+                          dangerouslySetInnerHTML={{ 
+                            __html: variant.svg
+                              .replace(/fill="#[^"]*"/g, 'fill="white"')
+                              .replace(/stroke="#[^"]*"/g, 'stroke="white"')
+                              .replace(/fill="#1a1a1a"/g, 'fill="white"')
+                              .replace(/fill="#666"/g, 'fill="#ccc"')
+                          }}
+                          className="w-full flex justify-center"
+                          style={{ maxHeight: '100px', overflow: 'hidden' }}
+                        />
+                      </div>
+                    </CardContent>
+                  </Card>
                 ))}
-              </Tabs>
+              </div>
             </div>
           )}
         </div>

@@ -152,23 +152,40 @@ const generateFallbackSVGLogo = (brandName: string, tagline: string | undefined,
   if (textTransform === "uppercase") displayName = brandName.toUpperCase();
   if (textTransform === "lowercase") displayName = brandName.toLowerCase();
   
-  // Clean, professional fallback - just good typography
-  if (variant === 'stacked' && tagline) {
-    return `<svg width="300" height="120" xmlns="http://www.w3.org/2000/svg">
-      <text x="150" y="60" text-anchor="middle" font-family="${fontFamily}" font-size="36" font-weight="${fontWeight}" fill="#1a1a1a" letter-spacing="0.05em">
-        ${displayName}
-      </text>
-      <text x="150" y="85" text-anchor="middle" font-family="${fontFamily}" font-size="14" fill="#666" letter-spacing="0.1em">
-        ${tagline.toUpperCase()}
-      </text>
-    </svg>`;
+  // Create distinct variations for each layout
+  switch (variant) {
+    case 'horizontal':
+      return `<svg width="400" height="80" xmlns="http://www.w3.org/2000/svg">
+        <text x="20" y="50" font-family="${fontFamily}" font-size="42" font-weight="${fontWeight}" fill="#1a1a1a" letter-spacing="0.05em">
+          ${displayName}
+        </text>
+        ${tagline ? `<text x="20" y="70" font-family="${fontFamily}" font-size="14" fill="#666" letter-spacing="0.1em">${tagline}</text>` : ''}
+      </svg>`;
+      
+    case 'stacked':
+      return `<svg width="300" height="140" xmlns="http://www.w3.org/2000/svg">
+        <text x="150" y="60" text-anchor="middle" font-family="${fontFamily}" font-size="36" font-weight="${fontWeight}" fill="#1a1a1a" letter-spacing="0.05em">
+          ${displayName}
+        </text>
+        ${tagline ? `<text x="150" y="90" text-anchor="middle" font-family="${fontFamily}" font-size="14" fill="#666" letter-spacing="0.1em">${tagline.toUpperCase()}</text>` : ''}
+        <line x1="75" y1="110" x2="225" y2="110" stroke="#e5e5e5" stroke-width="1"/>
+      </svg>`;
+      
+    case 'wordmark':
+      return `<svg width="350" height="100" xmlns="http://www.w3.org/2000/svg">
+        <rect x="0" y="0" width="350" height="100" fill="#f8f9fa" stroke="#e5e5e5" stroke-width="1"/>
+        <text x="175" y="60" text-anchor="middle" font-family="${fontFamily}" font-size="48" font-weight="${fontWeight}" fill="#1a1a1a" letter-spacing="0.1em">
+          ${displayName}
+        </text>
+      </svg>`;
+      
+    default:
+      return `<svg width="350" height="80" xmlns="http://www.w3.org/2000/svg">
+        <text x="20" y="50" font-family="${fontFamily}" font-size="42" font-weight="${fontWeight}" fill="#1a1a1a" letter-spacing="0.05em">
+          ${displayName}
+        </text>
+      </svg>`;
   }
-  
-  return `<svg width="350" height="80" xmlns="http://www.w3.org/2000/svg">
-    <text x="20" y="50" font-family="${fontFamily}" font-size="42" font-weight="${fontWeight}" fill="#1a1a1a" letter-spacing="0.05em">
-      ${displayName}
-    </text>
-  </svg>`;
 };
 
 

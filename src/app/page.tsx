@@ -4,7 +4,6 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Palette, Zap, Download, Sparkles } from "lucide-react";
 import Link from "next/link";
 
@@ -142,87 +141,94 @@ export default function Home() {
       {/* Sample Gallery */}
       <section id="examples" className="py-20">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12">
-            Style for every vibe
+          <h2 className="text-3xl font-bold text-center mb-4">
+            Professional logos in every style
           </h2>
-          
-          <Tabs defaultValue="minimalist" className="max-w-4xl mx-auto">
-            <TabsList className="grid w-full grid-cols-3 md:grid-cols-6">
-              <TabsTrigger value="minimalist">Minimal</TabsTrigger>
-              <TabsTrigger value="futuristic">Future</TabsTrigger>
-              <TabsTrigger value="elegant">Elegant</TabsTrigger>
-              <TabsTrigger value="rounded">Rounded</TabsTrigger>
-              <TabsTrigger value="brutalist">Brutal</TabsTrigger>
-              <TabsTrigger value="meme">Meme</TabsTrigger>
-            </TabsList>
-            
-            <TabsContent value="minimalist" className="mt-8">
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                {["Acme", "Stark", "Void"].map((name) => (
-                  <Card key={name} className="p-8 text-center">
-                    <div className="text-2xl font-light tracking-wide">{name}</div>
-                  </Card>
-                ))}
+          <p className="text-muted-foreground text-center mb-16 max-w-2xl mx-auto">
+            From Fortune 500 minimalism to viral meme brands. Our AI adapts to your vibe.
+          </p>
+
+          {/* Clean grid showcase */}
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 max-w-6xl mx-auto">
+            {/* Minimal */}
+            <div className="group cursor-pointer">
+              <div className="aspect-square bg-white border border-gray-200 rounded-lg p-6 flex items-center justify-center mb-3 group-hover:shadow-lg transition-shadow">
+                <div className="text-xl font-light tracking-wide text-gray-900">Acme</div>
               </div>
-            </TabsContent>
-            
-            <TabsContent value="futuristic" className="mt-8">
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                {["NEXUS", "FLUX", "QUANTUM"].map((name) => (
-                  <Card key={name} className="p-8 text-center bg-black text-white">
-                    <div className="text-2xl font-bold tracking-wider">{name}</div>
-                  </Card>
-                ))}
+              <div className="text-center">
+                <div className="text-sm font-medium">Minimal</div>
+                <div className="text-xs text-muted-foreground">Clean & simple</div>
               </div>
-            </TabsContent>
-            
-            <TabsContent value="elegant" className="mt-8">
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                {["Luxe", "Maison", "Atelier"].map((name) => (
-                  <Card key={name} className="p-8 text-center">
-                    <div className="text-2xl font-serif">{name}</div>
-                  </Card>
-                ))}
+            </div>
+
+            {/* Futuristic */}
+            <div className="group cursor-pointer">
+              <div className="aspect-square bg-black rounded-lg p-6 flex items-center justify-center mb-3 group-hover:shadow-lg transition-shadow">
+                <div className="text-xl font-bold tracking-wider text-white">NEXUS</div>
               </div>
-            </TabsContent>
-            
-            <TabsContent value="rounded" className="mt-8">
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                {["bubble", "happy", "friend"].map((name) => (
-                  <Card key={name} className="p-8 text-center">
-                    <div className="text-2xl font-bold rounded-full bg-primary text-primary-foreground px-4 py-2 inline-block">
-                      {name}
-                    </div>
-                  </Card>
-                ))}
+              <div className="text-center">
+                <div className="text-sm font-medium">Futuristic</div>
+                <div className="text-xs text-muted-foreground">Tech & bold</div>
               </div>
-            </TabsContent>
-            
-            <TabsContent value="brutalist" className="mt-8">
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                {["BRICK", "STEEL", "CONCRETE"].map((name) => (
-                  <Card key={name} className="p-8 text-center border-4 border-black">
-                    <div className="text-2xl font-black">{name}</div>
-                  </Card>
-                ))}
+            </div>
+
+            {/* Elegant */}
+            <div className="group cursor-pointer">
+              <div className="aspect-square bg-gradient-to-br from-amber-50 to-amber-100 border border-amber-200 rounded-lg p-6 flex items-center justify-center mb-3 group-hover:shadow-lg transition-shadow">
+                <div className="text-xl font-serif text-amber-900">Luxe</div>
               </div>
-            </TabsContent>
-            
-            <TabsContent value="meme" className="mt-8">
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                {[
-                  { name: "HODL", tagline: "Diamond hands 💎" },
-                  { name: "moon", tagline: "To the moon 🚀" },
-                  { name: "WAGMI", tagline: "We're all gonna make it ✨" }
-                ].map((item) => (
-                  <Card key={item.name} className="p-8 text-center bg-gradient-to-r from-purple-500 to-pink-500 text-white">
-                    <div className="text-2xl font-black">{item.name}</div>
-                    <div className="text-sm mt-2">{item.tagline}</div>
-                  </Card>
-                ))}
+              <div className="text-center">
+                <div className="text-sm font-medium">Elegant</div>
+                <div className="text-xs text-muted-foreground">Luxury & refined</div>
               </div>
-            </TabsContent>
-          </Tabs>
+            </div>
+
+            {/* Playful */}
+            <div className="group cursor-pointer">
+              <div className="aspect-square bg-gradient-to-br from-blue-50 to-purple-50 border border-purple-200 rounded-lg p-6 flex items-center justify-center mb-3 group-hover:shadow-lg transition-shadow">
+                <div className="text-lg font-bold text-purple-600 bg-purple-100 rounded-full px-3 py-1">bubble</div>
+              </div>
+              <div className="text-center">
+                <div className="text-sm font-medium">Playful</div>
+                <div className="text-xs text-muted-foreground">Fun & friendly</div>
+              </div>
+            </div>
+
+            {/* Brutalist */}
+            <div className="group cursor-pointer">
+              <div className="aspect-square bg-gray-100 border-4 border-black rounded-lg p-6 flex items-center justify-center mb-3 group-hover:shadow-lg transition-shadow">
+                <div className="text-xl font-black">BRICK</div>
+              </div>
+              <div className="text-center">
+                <div className="text-sm font-medium">Brutalist</div>
+                <div className="text-xs text-muted-foreground">Bold & edgy</div>
+              </div>
+            </div>
+
+            {/* Meme */}
+            <div className="group cursor-pointer">
+              <div className="aspect-square bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg p-6 flex items-center justify-center mb-3 group-hover:shadow-lg transition-shadow">
+                <div className="text-center text-white">
+                  <div className="text-lg font-black">HODL</div>
+                  <div className="text-xs">💎🙌</div>
+                </div>
+              </div>
+              <div className="text-center">
+                <div className="text-sm font-medium">Meme</div>
+                <div className="text-xs text-muted-foreground">Viral & spicy</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Call to action */}
+          <div className="text-center mt-12">
+            <p className="text-muted-foreground mb-4">
+              + dozens more styles. Our AI understands your brand personality.
+            </p>
+            <Button variant="outline" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+              Try Your Brand Now
+            </Button>
+          </div>
         </div>
       </section>
 
