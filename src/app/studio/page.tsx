@@ -348,7 +348,7 @@ function StudioContent() {
               </div>
 
                             {/* Logo Grid Display */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {logoVariants.map((variant) => (
                   <Card 
                     key={variant.id} 
@@ -366,17 +366,17 @@ function StudioContent() {
                     </CardHeader>
                     <CardContent>
                       {/* Logo Preview */}
-                      <div className={`bg-white p-4 rounded border flex items-center justify-center ${logoType === "ai" ? "min-h-[200px]" : "min-h-[120px] mb-3"}`}>
+                      <div className={`bg-white p-2 rounded border flex items-center justify-center ${logoType === "ai" ? "min-h-[220px]" : "min-h-[140px] mb-3"}`}>
                         <div 
                           dangerouslySetInnerHTML={{ __html: variant.svg }}
                           className="w-full flex justify-center"
-                          style={{ maxHeight: logoType === "ai" ? '160px' : '100px', overflow: 'hidden' }}
+                          style={{ width: '200px', height: '200px', maxWidth: '200px', maxHeight: '200px' }}
                         />
                       </div>
                       
                       {/* Dark Background Preview - Only show for text logos */}
                       {logoType === "text" && (
-                        <div className="bg-black p-4 rounded border flex items-center justify-center min-h-[120px]">
+                        <div className="bg-black p-2 rounded border flex items-center justify-center min-h-[140px]">
                           <div 
                             dangerouslySetInnerHTML={{ 
                               __html: variant.svg
@@ -386,7 +386,7 @@ function StudioContent() {
                                 .replace(/fill="#666"/g, 'fill="#ccc"')
                             }}
                             className="w-full flex justify-center"
-                            style={{ maxHeight: '100px', overflow: 'hidden' }}
+                            style={{ width: '200px', height: '200px', maxWidth: '200px', maxHeight: '200px' }}
                           />
                         </div>
                       )}

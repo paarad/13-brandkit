@@ -274,27 +274,13 @@ export async function POST(request: NextRequest) {
           textTransform: getVibeCase(vibe),
           color: palette.primary
         }
-      },
-      {
-        id: "text-3",
-        name: "Wordmark",
-        svg: generateFallbackSVGLogo(name, tagline, vibe, 'wordmark'),
-        style: {
-          fontFamily: getVibeFont(vibe),
-          fontSize: "40px",
-          fontWeight: getVibeWeight(vibe), 
-          letterSpacing: getVibeSpacing(vibe),
-          textTransform: getVibeCase(vibe),
-          color: palette.accent
-        }
       }
     ];
 
     // Generate AI logo variants using DALL-E (slower but more creative)
-    const [aiVariant1Svg, aiVariant2Svg, aiVariant3Svg] = await Promise.all([
+    const [aiVariant1Svg, aiVariant2Svg] = await Promise.all([
       generateLogoWithDALLE(name, tagline, vibe, memeMode, 'horizontal', palette),
-      generateLogoWithDALLE(name, tagline, vibe, memeMode, 'stacked', palette),
-      generateLogoWithDALLE(name, tagline, vibe, memeMode, 'wordmark', palette)
+      generateLogoWithDALLE(name, tagline, vibe, memeMode, 'stacked', palette)
     ]);
 
     const aiVariants: LogoVariant[] = [
@@ -322,19 +308,6 @@ export async function POST(request: NextRequest) {
           letterSpacing: getVibeSpacing(vibe),
           textTransform: getVibeCase(vibe),
           color: palette.primary
-        }
-      },
-      {
-        id: "ai-3",
-        name: "AI Wordmark",
-        svg: aiVariant3Svg,
-        style: {
-          fontFamily: getVibeFont(vibe),
-          fontSize: "40px",
-          fontWeight: getVibeWeight(vibe), 
-          letterSpacing: getVibeSpacing(vibe),
-          textTransform: getVibeCase(vibe),
-          color: palette.accent
         }
       }
     ];
